@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash_chat/routes.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -8,6 +10,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 48.0,
             ),
             TextField(
+              controller: emailController,
               onChanged: (value) {
                 //Do something with the user input.
               },
@@ -52,6 +58,8 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 8.0,
             ),
             TextField(
+              controller: passwordController,
+              obscureText: true,
               onChanged: (value) {
                 //Do something with the user input.
               },
@@ -84,8 +92,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 borderRadius: const BorderRadius.all(Radius.circular(30.0)),
                 elevation: 5.0,
                 child: MaterialButton(
-                  onPressed: () {
+                  onPressed: () async {
                     //Implement login functionality.
+                    try {
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                          email: emailController.text,
+                          password: passwordController.text);
+
+                      await Navigator.pushReplacementNamed(
+                          context, Routes.chat);
+                    } on Exception catch (e) {
+                      print(e);
+                    }
                   },
                   minWidth: 200.0,
                   height: 42.0,

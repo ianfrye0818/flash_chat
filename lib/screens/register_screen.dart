@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash_chat/routes.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -16,8 +17,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     UserCredential response = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
             email: emailController.text, password: passwordController.text);
+
     print(response.user?.displayName ?? 'No display name set');
     print(response.user?.email ?? 'No email set');
+    Navigator.pushReplacementNamed(context, Routes.chat);
   }
 
   @override

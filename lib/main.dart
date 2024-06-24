@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flash_chat/firebase_options.dart';
+import 'package:flash_chat/routes.dart';
 import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/register_screen.dart';
@@ -36,10 +37,10 @@ class FlashChat extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         initialRoute: user == null ? '/' : '/chat',
         routes: {
-          '/': (context) => const WelcomeScreen(),
-          '/login': (context) => const LoginScreen(),
-          '/register': (context) => const RegisterScreen(),
-          '/chat': (context) => const ChatScreen(),
+          Routes.welcome: (context) => const WelcomeScreen(),
+          Routes.login: (context) => const LoginScreen(),
+          Routes.register: (context) => const RegisterScreen(),
+          Routes.chat: (context) => const ChatScreen(),
         });
   }
 }
