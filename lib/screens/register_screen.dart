@@ -13,14 +13,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  Future<void> handleLogin() async {
+  Future<void> handleRegister() async {
     UserCredential response = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
             email: emailController.text, password: passwordController.text);
-
-    print(response.user?.displayName ?? 'No display name set');
-    print(response.user?.email ?? 'No email set');
-    Navigator.pushReplacementNamed(context, Routes.chat);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(Routes.chat, (route) => false);
   }
 
   @override
@@ -33,9 +31,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            SizedBox(
-              height: 200.0,
-              child: Image.asset('images/logo.png'),
+            Hero(
+              tag: 'lightning',
+              child: SizedBox(
+                height: 200.0,
+                child: Image.asset('images/logo.png'),
+              ),
             ),
             const SizedBox(
               height: 48.0,
@@ -99,7 +100,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 elevation: 5.0,
                 child: MaterialButton(
                   onPressed: () {
-                    handleLogin();
+                    try {
+                      handleRegister();
+                    } on Exception catch (e) {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SnackBar(content: Text(e.toString()));
+                          });
+                    }
                   },
                   minWidth: 200.0,
                   height: 42.0,

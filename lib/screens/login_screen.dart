@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/routes.dart';
 import 'package:flutter/material.dart';
 
+import 'chat_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -23,9 +25,12 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            SizedBox(
-              height: 200.0,
-              child: Image.asset('images/logo.png'),
+            Hero(
+              tag: 'lightning',
+              child: SizedBox(
+                height: 200.0,
+                child: Image.asset('images/logo.png'),
+              ),
             ),
             const SizedBox(
               height: 48.0,
@@ -93,16 +98,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 elevation: 5.0,
                 child: MaterialButton(
                   onPressed: () async {
-                    //Implement login functionality.
                     try {
                       await FirebaseAuth.instance.signInWithEmailAndPassword(
                           email: emailController.text,
                           password: passwordController.text);
-
-                      await Navigator.pushReplacementNamed(
-                          context, Routes.chat);
+                      await Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.chat, (route) => false);
                     } on Exception catch (e) {
-                      print(e);
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SnackBar(content: Text(e.toString()));
+                          });
                     }
                   },
                   minWidth: 200.0,
